@@ -2,5 +2,12 @@
 	"env": "development",
 	"port": 0,
 	"mongoUri": "",
-	"sessionSecret": ""
+	"sessionSecret": "",
+	"smtp": {
+		"host": "",
+		"port": 0,
+		"secure": false,
+		"user": "",
+		"password": ""
+	}
 }

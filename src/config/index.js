@@ -30,6 +30,43 @@ const config = convict({
 		default: 'top-secret-secret',
 		nullable: false,
 		env: 'SESSION_SECRET'
+	},
+	smtp: {
+		host: {
+			doc: 'smtp host name',
+			format: String,
+			default: 'smtp.zoho.com',
+			nullable: false,
+			env: 'SMTP_HOST'
+		},
+		port: {
+			doc: 'smtp port number',
+			format: 'port',
+			default: 587,
+			nullable: false,
+			env: 'SMTP_PORT'
+		},
+		secure: {
+			doc: 'secure mail or not',
+			format: Boolean,
+			default: false,
+			nullable: false,
+			env: 'SMTP_SECURE'
+		},
+		user: {
+			doc: 'smtp user email',
+			format: String,
+			default: 'admin@zoho.com',
+			nullable: false,
+			env: 'SMTP_USER'
+		},
+		password: {
+			doc: 'smtp user email password',
+			format: String,
+			default: 'super-secure-password',
+			nullable: false,
+			env: 'SMTP_PASSWORD'
+		}
 	}
 })
 
