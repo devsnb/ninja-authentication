@@ -74,3 +74,12 @@ export const destroySession = function (req, res) {
 		res.redirect('/')
 	})
 }
+
+/**
+ * handles the reset password page
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const passwordResetPageHandler = (req, res) => {
+	res.render('pages/reset-password')
+}

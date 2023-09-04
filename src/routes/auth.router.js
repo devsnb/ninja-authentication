@@ -4,7 +4,8 @@ import {
 	loginPageHandler,
 	createUserHandler,
 	createSession,
-	destroySession
+	destroySession,
+	passwordResetPageHandler
 } from '../controllers/auth.controller.js'
 import passport from 'passport'
 
@@ -21,5 +22,10 @@ router.post(
 	createSession
 )
 router.get('/sign-out', destroySession)
+router.get(
+	'/reset-password',
+	passport.checkAuthentication,
+	passwordResetPageHandler
+)
 
 export default router
