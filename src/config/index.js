@@ -67,6 +67,13 @@ const config = convict({
 			nullable: false,
 			env: 'SMTP_PASSWORD'
 		}
+	},
+	jwtSecret: {
+		doc: 'secret to sign & verify jwt',
+		format: String,
+		default: 'super-secret',
+		nullable: false,
+		env: 'JWT_SECRET'
 	}
 })
 

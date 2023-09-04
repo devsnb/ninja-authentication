@@ -9,5 +9,6 @@
 		"secure": false,
 		"user": "",
 		"password": ""
-	}
+	},
+	"jwtSecret": ""
 }
