@@ -4,5 +4,5 @@
  * @param {*} res the express response object
  */
 export const emailSignUpHandler = (req, res) => {
-	res.render('pages/index')
+	res.render('pages/sign-up')
 }
