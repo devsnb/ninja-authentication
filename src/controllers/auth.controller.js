@@ -83,3 +83,47 @@ export const destroySession = function (req, res) {
 export const passwordResetPageHandler = (req, res) => {
 	res.render('pages/reset-password')
 }
+
+/**
+ * Rests/update password of a user
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const passwordResetHandler = async (req, res) => {
+	try {
+		const userFound = await User.findById(req.user._id)
+
+		if (!userFound) {
+			return res.redirect('/login')
+		}
+
+		const passwordMatches = await argon.verify(
+			userFound.password,
+			req.body.currentPassword
+		)
+
+		if (!passwordMatches) {
+			return res.redirect('back')
+		}
+
+		if (req.body.newPassword !== req.body.confirmNewPassword) {
+			return res.redirect('back')
+		}
+
+		const hashedPassword = await argon.hash(req.body.newPassword)
+
+		userFound.password = hashedPassword
+
+		await userFound.save()
+
+		return req.logout(function (err) {
+			if (err) {
+				return next(err)
+			}
+			res.redirect('/')
+		})
+	} catch (error) {
+		logger.error(error, 'failed to reset password')
+		return res.redirect('back')
+	}
+}
