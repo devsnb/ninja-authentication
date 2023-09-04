@@ -53,6 +53,15 @@ export const createUserHandler = async (req, res) => {
 }
 
 /**
+ * create creates a new session
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const createSession = function (req, res) {
+	return res.redirect('/')
+}
+
+/**
  * destroy the current session
  * @param {*} req the express request object
  * @param {*} res the express response object
