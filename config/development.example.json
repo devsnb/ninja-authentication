@@ -1,5 +1,6 @@
 {
 	"env": "development",
 	"port": 0,
-	"mongoUri": ""
+	"mongoUri": "",
+	"sessionSecret": ""
 }

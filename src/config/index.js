@@ -23,6 +23,13 @@ const config = convict({
 		default: '',
 		nullable: false,
 		env: 'MONGO_URI'
+	},
+	sessionSecret: {
+		doc: 'secret for session',
+		format: String,
+		default: 'top-secret-secret',
+		nullable: false,
+		env: 'SESSION_SECRET'
 	}
 })
 
