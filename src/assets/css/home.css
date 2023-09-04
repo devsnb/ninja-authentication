@@ -1,0 +1,20 @@
+#home {
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+}
+
+a {
+  text-align: center;
+  color: #fff;
+  background-color: #0171d3;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 6px;
+  padding: 1rem;
+  text-decoration: none;
+  margin: 0.5rem;
+}
