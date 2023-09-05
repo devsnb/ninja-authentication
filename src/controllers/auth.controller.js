@@ -127,3 +127,12 @@ export const passwordResetHandler = async (req, res) => {
 		return res.redirect('back')
 	}
 }
+
+/**
+ * Handles forgot password page
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const forgotPasswordPageHandler = (req, res) => {
+	res.render('pages/forgot-password')
+}

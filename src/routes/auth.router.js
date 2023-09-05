@@ -6,7 +6,8 @@ import {
 	createSession,
 	destroySession,
 	passwordResetPageHandler,
-	passwordResetHandler
+	passwordResetHandler,
+	forgotPasswordPageHandler
 } from '../controllers/auth.controller.js'
 import passport from 'passport'
 
@@ -33,5 +34,6 @@ router.post(
 	passport.checkAuthentication,
 	passwordResetHandler
 )
+router.get('/forgot-password', forgotPasswordPageHandler)
 
 export default router
