@@ -13,7 +13,7 @@ const main = async () => {
 	const connection = await connectDB()
 
 	// bootstrap the application
-	const app = await application(connection)
+	const app = application(connection)
 
 	app.listen(PORT, () => {
 		logger.info(`application started on port: ${PORT}`)

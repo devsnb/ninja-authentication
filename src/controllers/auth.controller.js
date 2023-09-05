@@ -32,6 +32,7 @@ export const loginPageHandler = (req, res) => {
 export const createUserHandler = async (req, res) => {
 	try {
 		if (req.body.password != req.body.confirmPassword) {
+			req.flash('error', 'passwords do not match')
 			return res.redirect('back')
 		}
 
@@ -44,13 +45,16 @@ export const createUserHandler = async (req, res) => {
 				password: hashedPassword
 			}
 
+			req.flash('success', 'registration successful, please login to continue')
 			await User.create(payload)
 			return res.redirect('/login')
 		}
 
+		req.flash('error', 'user registration failed')
 		return res.redirect('back')
 	} catch (error) {
 		logger.error(error, 'error in finding user in signing up')
+		req.flash('error', 'user registration failed')
 		return res.redirect('back')
 	}
 }
@@ -61,6 +65,7 @@ export const createUserHandler = async (req, res) => {
  * @param {*} res the express response object
  */
 export const createSession = function (req, res) {
+	req.flash('success', 'logged in successfully')
 	return res.redirect('/')
 }
 
@@ -74,7 +79,8 @@ export const destroySession = function (req, res) {
 		if (err) {
 			return next(err)
 		}
-		res.redirect('/')
+		req.flash('success', 'logged out successfully')
+		res.redirect('/login')
 	})
 }
 
@@ -97,6 +103,7 @@ export const passwordResetHandler = async (req, res) => {
 		const userFound = await User.findById(req.user._id)
 
 		if (!userFound) {
+			req.flash('error', 'please login to continue')
 			return res.redirect('/login')
 		}
 
@@ -106,10 +113,12 @@ export const passwordResetHandler = async (req, res) => {
 		)
 
 		if (!passwordMatches) {
+			req.flash('error', 'invalid credentials')
 			return res.redirect('back')
 		}
 
 		if (req.body.newPassword !== req.body.confirmNewPassword) {
+			req.flash('error', 'passwords do not match')
 			return res.redirect('back')
 		}
 
@@ -123,10 +132,12 @@ export const passwordResetHandler = async (req, res) => {
 			if (err) {
 				return next(err)
 			}
-			res.redirect('/')
+			req.flash('success', 'logged out successfully, login to continue')
+			res.redirect('/login')
 		})
 	} catch (error) {
 		logger.error(error, 'failed to reset password')
+		req.flash('error', 'failed to reset password')
 		return res.redirect('back')
 	}
 }
@@ -157,7 +168,7 @@ export const forgotPasswordHandler = async (req, res) => {
 				if (err) {
 					return next(err)
 				}
-				res.redirect('/')
+				res.redirect('/login')
 			})
 		}
 
@@ -194,16 +205,20 @@ export const forgotPasswordHandler = async (req, res) => {
 			if (err) {
 				return next(err)
 			}
-			res.redirect('/')
+			req.flash(
+				'success',
+				'an email containing reset link has been sent to your email, if the email you provided is correct'
+			)
+			res.redirect('/login')
 		})
 	} catch (error) {
 		logger.error(error, 'resetting password failed')
+		req.flash('error', 'failed to send reset link')
 		res.redirect('back')
 	}
 }
 
 /**
- *
  * handles change forgot password page
  * @param {*} req the express request object
  * @param {*} res the express response object
@@ -218,6 +233,7 @@ export const changeForgotPasswordPageHandler = async (req, res) => {
 	const payload = verifyJwt(token)
 
 	if (!payload || !payload?.id) {
+		req.flash('error', 'link is invalid / link has expired')
 		return res.redirect('/login')
 	}
 
@@ -247,6 +263,7 @@ export const changeForgotPasswordHandler = async (req, res) => {
 		const payload = verifyJwt(req.body.token)
 
 		if (!payload || !payload?.id) {
+			req.flash('error', 'link is invalid / link has expired')
 			res.redirect('/login')
 		}
 
@@ -257,6 +274,7 @@ export const changeForgotPasswordHandler = async (req, res) => {
 		}
 
 		if (req.body.newPassword !== req.body.confirmNewPassword) {
+			req.flash('error', 'passwords do not match')
 			res.redirect('/back')
 		}
 
@@ -266,8 +284,10 @@ export const changeForgotPasswordHandler = async (req, res) => {
 
 		await userFound.save()
 
+		req.flash('success', 'password has been set, please login to continue')
 		res.redirect('/login')
 	} catch (error) {
+		req.flash('error', 'failed to set the password')
 		logger.error(error)
 		res.redirect('/login')
 	}

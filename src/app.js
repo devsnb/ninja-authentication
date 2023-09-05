@@ -1,17 +1,20 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import express from 'express'
-import config from './config/index.js'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import expressLayouts from 'express-ejs-layouts'
 import passport from 'passport'
+import flash from 'connect-flash'
+
+import config from './config/index.js'
 import './initializers/passport-local.js'
 import './initializers/passport-google-oauth.js'
 import router from './routes/index.js'
+import { setFlash } from './middleware/set-flash.middleware.js'
 
-async function app(connection) {
+function app(connection) {
 	const app = express()
 
 	// register cookie-parser
@@ -58,6 +61,10 @@ async function app(connection) {
 			})
 		})
 	)
+
+	// register flash
+	app.use(flash())
+	app.use(setFlash)
 
 	// setup passport
 	app.use(passport.initialize())

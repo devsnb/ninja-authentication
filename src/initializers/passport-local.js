@@ -20,12 +20,14 @@ passport.use(
 			try {
 				const user = await User.findOne({ email })
 				if (!user) {
+					req.flash('error', 'failed to login')
 					return done(null, false)
 				}
 
 				const passwordMatches = await argon.verify(user.password, password)
 
 				if (!passwordMatches) {
+					req.flash('error', 'failed to login')
 					return done(null, false)
 				}
 
