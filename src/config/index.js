@@ -81,6 +81,29 @@ const config = convict({
 		default: 'super-secret',
 		nullable: false,
 		env: 'JWT_SECRET'
+	},
+	googleOauth: {
+		clientId: {
+			doc: 'google client id',
+			format: String,
+			default: 'client-id',
+			nullable: false,
+			env: 'GOOGLE_CLIENT_ID'
+		},
+		clientSecret: {
+			doc: 'google client secret',
+			format: String,
+			default: 'client-secret',
+			nullable: false,
+			env: 'GOOGLE_CLIENT_SECRET'
+		},
+		callbackUrl: {
+			doc: 'google callback url',
+			format: String,
+			default: 'http://localhost',
+			nullable: false,
+			env: 'GOOGLE_CALLBACK_URL'
+		}
 	}
 })
 

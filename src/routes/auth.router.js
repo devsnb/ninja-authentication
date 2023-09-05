@@ -38,4 +38,19 @@ router.post('/forgot-password', forgotPasswordHandler)
 router.get('/change-forgot-password', changeForgotPasswordPageHandler)
 router.post('/change-forgot-password', changeForgotPasswordHandler)
 
+// google oauth
+router.get(
+	'/login/google',
+	passport.authenticate('google', { scope: ['profile', 'email'] })
+)
+
+// handle google oauth callback
+router.get(
+	'/login/google/callback',
+	passport.authenticate('google', {
+		failureRedirect: '/login'
+	}),
+	createSession
+)
+
 export default router

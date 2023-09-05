@@ -10,5 +10,10 @@
 		"user": "",
 		"password": ""
 	},
-	"jwtSecret": ""
+	"jwtSecret": "",
+	"googleOauth": {
+		"clientId": "",
+		"clientSecret": "",
+		"callbackUrl": ""
+	}
 }

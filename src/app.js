@@ -8,6 +8,7 @@ import MongoStore from 'connect-mongo'
 import expressLayouts from 'express-ejs-layouts'
 import passport from 'passport'
 import './initializers/passport-local.js'
+import './initializers/passport-google-oauth.js'
 import router from './routes/index.js'
 
 async function app(connection) {
