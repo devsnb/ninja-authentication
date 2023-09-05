@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "starter project for a nodejs authentication system",
 	"type": "module",
+	"engines": {
+		"node": ">=18 <20"
+	},
 	"main": "index.js",
 	"scripts": {
 		"start": "cross-env NODE_ENV=production node src/main.js",
