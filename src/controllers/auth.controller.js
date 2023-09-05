@@ -3,7 +3,7 @@ import * as argon from 'argon2'
 import config from '../config/index.js'
 import logger from '../common/logger.js'
 import User from '../models/user.model.js'
-import { signJwt } from '../utils/jwt.util.js'
+import { signJwt, verifyJwt } from '../utils/jwt.util.js'
 import { sendMail } from '../utils/mailer.util.js'
 
 /**
@@ -172,7 +172,7 @@ export const forgotPasswordHandler = async (req, res) => {
 		}
 
 		const baseUrl = config.get('applicationHost')
-		const resetPasswordUrl = new URL('/reset-password', baseUrl)
+		const resetPasswordUrl = new URL('/change-forgot-password', baseUrl)
 
 		if (config.get('env') !== 'production') {
 			resetPasswordUrl.port = config.get('port')
@@ -199,5 +199,76 @@ export const forgotPasswordHandler = async (req, res) => {
 	} catch (error) {
 		logger.error(error, 'resetting password failed')
 		res.redirect('back')
+	}
+}
+
+/**
+ *
+ * handles change forgot password page
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const changeForgotPasswordPageHandler = async (req, res) => {
+	const token = req.query['reset-token']
+
+	if (!token) {
+		return res.redirect('/login')
+	}
+
+	const payload = verifyJwt(token)
+
+	if (!payload || !payload?.id) {
+		return res.redirect('/login')
+	}
+
+	const userFound = await User.findById(payload.id)
+
+	if (!userFound) {
+		return res.redirect('/login')
+	}
+
+	return res.render('pages/change-password', {
+		email: userFound.email,
+		token
+	})
+}
+
+/**
+ * Changes password of the user when user forgets their password
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const changeForgotPasswordHandler = async (req, res) => {
+	try {
+		if (!req.body.token) {
+			return res.redirect('/login')
+		}
+
+		const payload = verifyJwt(req.body.token)
+
+		if (!payload || !payload?.id) {
+			res.redirect('/login')
+		}
+
+		const userFound = await User.findOne({ email: req.body.email })
+
+		if (!userFound) {
+			res.redirect('/login')
+		}
+
+		if (req.body.newPassword !== req.body.confirmNewPassword) {
+			res.redirect('/back')
+		}
+
+		const hashedPassword = await argon.hash(req.body.newPassword)
+
+		userFound.password = hashedPassword
+
+		await userFound.save()
+
+		res.redirect('/login')
+	} catch (error) {
+		logger.error(error)
+		res.redirect('/login')
 	}
 }

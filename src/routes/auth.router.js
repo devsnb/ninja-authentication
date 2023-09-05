@@ -8,7 +8,9 @@ import {
 	passwordResetPageHandler,
 	passwordResetHandler,
 	forgotPasswordPageHandler,
-	forgotPasswordHandler
+	forgotPasswordHandler,
+	changeForgotPasswordPageHandler,
+	changeForgotPasswordHandler
 } from '../controllers/auth.controller.js'
 import passport from 'passport'
 
@@ -30,12 +32,10 @@ router.get(
 	passport.checkAuthentication,
 	passwordResetPageHandler
 )
-router.post(
-	'/reset-password',
-	passport.checkAuthentication,
-	passwordResetHandler
-)
+router.post('/reset-password', passwordResetHandler)
 router.get('/forgot-password', forgotPasswordPageHandler)
 router.post('/forgot-password', forgotPasswordHandler)
+router.get('/change-forgot-password', changeForgotPasswordPageHandler)
+router.post('/change-forgot-password', changeForgotPasswordHandler)
 
 export default router
