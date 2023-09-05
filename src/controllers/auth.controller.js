@@ -12,7 +12,9 @@ import { sendMail } from '../utils/mailer.util.js'
  * @param {*} res the express response object
  */
 export const signupPageHandler = (req, res) => {
-	res.render('pages/sign-up')
+	res.render('pages/sign-up', {
+		title: 'Sign Up'
+	})
 }
 
 /**
@@ -21,7 +23,9 @@ export const signupPageHandler = (req, res) => {
  * @param {*} res the express response object
  */
 export const loginPageHandler = (req, res) => {
-	res.render('pages/login')
+	res.render('pages/login', {
+		title: 'Login'
+	})
 }
 
 /**
@@ -97,7 +101,9 @@ export const destroySession = function (req, res) {
  * @param {*} res the express response object
  */
 export const passwordResetPageHandler = (req, res) => {
-	res.render('pages/reset-password')
+	res.render('pages/reset-password', {
+		title: 'Reset Password'
+	})
 }
 
 /**
@@ -162,7 +168,9 @@ export const passwordResetHandler = async (req, res) => {
  * @param {*} res the express response object
  */
 export const forgotPasswordPageHandler = (req, res) => {
-	res.render('pages/forgot-password')
+	res.render('pages/forgot-password', {
+		title: 'Reset Forgot Password'
+	})
 }
 
 /**
@@ -270,6 +278,7 @@ export const changeForgotPasswordPageHandler = async (req, res) => {
 	}
 
 	return res.render('pages/change-password', {
+		title: 'Change Password',
 		email: userFound.email,
 		token
 	})
