@@ -19,6 +19,7 @@ passport.use(
 		async function (req, email, password, done) {
 			try {
 				const user = await User.findOne({ email })
+				// checking if the user exists or not
 				if (!user) {
 					req.flash('error', 'failed to login')
 					return done(null, false)
@@ -26,6 +27,7 @@ passport.use(
 
 				const passwordMatches = await argon.verify(user.password, password)
 
+				// checking if the password matches
 				if (!passwordMatches) {
 					req.flash('error', 'failed to login')
 					return done(null, false)
@@ -33,9 +35,8 @@ passport.use(
 
 				return done(null, user)
 			} catch (error) {
-				if (err) {
-					return done(err)
-				}
+				logger.error(error, 'failed to login')
+				return done(error, false)
 			}
 		}
 	)

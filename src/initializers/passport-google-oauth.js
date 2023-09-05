@@ -17,9 +17,11 @@ passport.use(
 			try {
 				const user = await User.findOne({ email: profile.emails[0].value })
 
+				// if user user exists simply login the user
 				if (user) {
 					return done(null, user)
 				} else {
+					// if user does not exist create a new user
 					const newUser = await User.create({
 						name: profile.displayName,
 						email: profile.emails[0].value,

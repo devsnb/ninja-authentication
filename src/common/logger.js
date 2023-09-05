@@ -1,5 +1,8 @@
 import pino from 'pino'
 
+/**
+ * Simple logger
+ */
 const logger = pino({
 	transport: {
 		target: 'pino-pretty',
