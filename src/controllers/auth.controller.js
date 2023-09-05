@@ -1,7 +1,10 @@
 import * as argon from 'argon2'
 
+import config from '../config/index.js'
 import logger from '../common/logger.js'
 import User from '../models/user.model.js'
+import { signJwt } from '../utils/jwt.util.js'
+import { sendMail } from '../utils/mailer.util.js'
 
 /**
  * Handles user sign up page
@@ -135,4 +138,66 @@ export const passwordResetHandler = async (req, res) => {
  */
 export const forgotPasswordPageHandler = (req, res) => {
 	res.render('pages/forgot-password')
+}
+
+/**
+ * Sends an email to the user with reset password link
+ * @param {*} req the express request object
+ * @param {*} res the express response object
+ */
+export const forgotPasswordHandler = async (req, res) => {
+	try {
+		const email = req.body.email
+
+		const userFound = await User.findOne({ email })
+
+		if (!userFound) {
+			logger.error('user not found')
+			return req.logout(function (err) {
+				if (err) {
+					return next(err)
+				}
+				res.redirect('/')
+			})
+		}
+
+		const jwtPayload = {
+			id: userFound._id.toString()
+		}
+
+		const token = signJwt(jwtPayload)
+
+		if (!token) {
+			return res.redirect('back')
+		}
+
+		const baseUrl = config.get('applicationHost')
+		const resetPasswordUrl = new URL('/reset-password', baseUrl)
+
+		if (config.get('env') !== 'production') {
+			resetPasswordUrl.port = config.get('port')
+		}
+
+		resetPasswordUrl.searchParams.append('reset-token', token)
+
+		await sendMail(
+			userFound.email,
+			'Reset your password',
+			'/reset-password.ejs',
+			{
+				reset_link: resetPasswordUrl,
+				url: baseUrl
+			}
+		)
+
+		return req.logout(function (err) {
+			if (err) {
+				return next(err)
+			}
+			res.redirect('/')
+		})
+	} catch (error) {
+		logger.error(error, 'resetting password failed')
+		res.redirect('back')
+	}
 }

@@ -17,6 +17,13 @@ const config = convict({
 		env: 'PORT',
 		arg: 'port'
 	},
+	applicationHost: {
+		doc: 'url from where application is accessible',
+		format: String,
+		default: 'http://localhost',
+		nullable: false,
+		env: 'APPLICATION_HOST'
+	},
 	mongoUri: {
 		doc: 'url to connect to mongodb atlas',
 		format: String,
