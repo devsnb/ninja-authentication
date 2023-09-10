@@ -4,5 +4,7 @@
  * @param {*} res the express response object
  */
 export const homepageHandler = (req, res) => {
-	res.render('pages/index')
+	res.render('pages/index', {
+		title: 'Home'
+	})
 }
